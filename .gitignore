@@ -5,3 +5,6 @@ coverage/
 .cache/
 .env
 .DS_Store
+
+#ignore phpstorm configs
+.idea/
