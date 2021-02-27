@@ -75,6 +75,7 @@ const OrderHistoryItem = () => {
                   <div className="order-information">
                     <p className="title is-6 is-marginless">
                       It&apos;s been dispatched!
+                      {/*TODO I have no idea where to get this information*/}
                     </p>
 
                     <div>
