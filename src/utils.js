@@ -1,6 +1,6 @@
 const extractOrderData = data => {
   return data.map(
-    ({ id, name, total_price, line_items: original_line_items }) => {
+    ({ id, name, total_price, line_items: original_line_items, shipping_address }) => {
       let line_items = original_line_items.map(
         ({ id, image, name, price, variant_id }) => {
           /**
@@ -39,7 +39,8 @@ const extractOrderData = data => {
         id,
         name,
         total_price,
-        line_items
+        line_items,
+        shipping_address
       };
     }
   );
