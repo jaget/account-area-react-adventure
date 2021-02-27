@@ -9,7 +9,7 @@ import DeliveryDetails from './OrderHistoryItem/DeliveryDetails';
 import { extractOrderData } from './utils';
 
 const OrderHistoryItem = () => {
-  const [orderHistory, setOrderHistory] = useState({});
+  const [orderHistory, setOrderHistory] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false); //Whether the data was loaded successfully from API endpoint
   const [dataLoading, setDataLoading] = useState(true); //Whether we are waiting for a response from API endpoint
 
@@ -30,7 +30,7 @@ const OrderHistoryItem = () => {
         const formattedResponse = res[0]; // Response is an array rather than an object so we want first element in that array.
         if (formattedResponse.success) {
           setDataLoaded(true);
-          setOrderHistory(formattedResponse.orders);
+          setOrderHistory(extractOrderData(formattedResponse.orders));
         } else {
           setDataLoaded(false);
         }
@@ -51,70 +51,55 @@ const OrderHistoryItem = () => {
         <div className="column is-12">Loading order history please wait</div>
       )}
 
-      {!dataLoading && dataLoaded && (
-        <div className="column is-12">
-          <div className="box orders-history-block has-shadow-hover">
-            <div className="is-flex orders-block-header">
-              <OrderNumber orderNumber="467614-US" />
-              <OrderType orderType="One-time" />
-              <Price price="113.86" />
-              <Dispatch dispatchDate="August 7th 2019" />
-            </div>
+      {!dataLoading &&
+        dataLoaded &&
+        orderHistory.map(({ id, name, total_price, line_items }) => (
+          <div className="column is-12" key={id}>
+            <div className="box orders-history-block has-shadow-hover">
+              <div className="is-flex orders-block-header">
+                <OrderNumber orderNumber={name} />
+                <OrderType orderType="One-time" />
+                <Price price={total_price} />
+                <Dispatch dispatchDate="August 7th 2019" />
+              </div>
 
-            <hr />
+              <hr />
 
-            <div className="order-information">
-              <p className="title is-6 is-marginless">
-                It&apos;s been dispatched!
-              </p>
+              <div className="order-information">
+                <p className="title is-6 is-marginless">
+                  It&apos;s been dispatched!
+                </p>
 
-              <div>
-                <div className="order-information-expanded">
-                  <div className="product-list-boxes columns is-multiline">
-                    <ProductCard
-                      imageAlt="Product bars"
-                      imageSrc="https://huel-assets.s3.eu-west-2.amazonaws.com/temp-public/thumbnails/powder.jpg"
-                      productTitle="Huel Powder"
-                      productVariant={[
-                        '1x Berry',
-                        '1x Vanilla',
-                        '1x Chocolate'
-                      ]}
-                      price={99.0}
-                    />
-                    <div className="column is-6">
-                      <div className="media">
-                        <div className="media-left">
-                          <img
-                            alt="Product bars"
-                            className="image"
-                            src="https://cdn.shopify.com/s/files/1/0578/1097/products/HUEL_SHAKER_FROSTER_FR_1200.jpg?v=1515319444"
-                          />
-                        </div>
-                        <div className="media-content">
-                          <div>
-                            <p className="product-title">
-                              Huel Shaker Bottle (Clear)
-                            </p>
-                            <p className="product-variants">
-                              1x Huel Shaker Bottle (Clear)
-                            </p>
+                <div>
+                  <div className="order-information-expanded">
+                    {line_items.map(
+                      ({ id: productID, image, name: productTitle, price }) => (
+                        <>
+                          <div className="product-list-boxes columns is-multiline">
+                            <ProductCard
+                              key={productID}
+                              imagealt="Product bars"
+                              image={image}
+                              productTitle={productTitle}
+                              productVariant={[
+                                '1x Berry',
+                                '1x Vanilla',
+                                '1x Chocolate'
+                              ]}
+                              price={price}
+                            />
                           </div>
-                        </div>
-                        <div className="media-right">
-                          <p className="product-price">$5.00</p>
-                        </div>
-                      </div>
-                    </div>
+                          <hr />
+                          <DeliveryDetails deliveryAddress="925 N La Brea Ave, West Hollywood, 90038" />
+                        </>
+                      )
+                    )}
                   </div>
-                  <hr />
-                  <DeliveryDetails deliveryAddress="925 N La Brea Ave, West Hollywood, 90038" />
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        ))}
 
       <div className="column is-12">
         <div className="box orders-history-block has-shadow-hover">
@@ -123,7 +108,6 @@ const OrderHistoryItem = () => {
               <div>Order Number</div>
               <div>#467614-US</div>
             </div>
-
             <div className="item">
               <div>Order Type</div>
               <div>
