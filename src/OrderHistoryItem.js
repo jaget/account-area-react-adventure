@@ -6,6 +6,7 @@ import OrderType from './OrderHistoryItem/OrderType';
 import Price from './OrderHistoryItem/Price';
 import ProductCard from './OrderHistoryItem/ProductCard';
 import DeliveryDetails from './OrderHistoryItem/DeliveryDetails';
+import { extractOrderData } from './utils';
 
 const OrderHistoryItem = () => {
   const [orderHistory, setOrderHistory] = useState({});

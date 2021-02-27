@@ -3,7 +3,7 @@ import React from 'react';
 
 const ProductCard = ({
   imageAlt,
-  imageSrc,
+  image,
   productTitle,
   productVariant,
   price
@@ -11,7 +11,7 @@ const ProductCard = ({
   <div className="column is-6">
     <div className="media">
       <div className="media-left">
-        <img alt={imageAlt} className="image" src={imageSrc} />
+        <img alt={imageAlt} className="image" src={image} />
       </div>
       <div className="media-content">
         <div>
