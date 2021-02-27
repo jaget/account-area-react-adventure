@@ -53,53 +53,57 @@ const OrderHistoryItem = () => {
 
       {!dataLoading &&
         dataLoaded &&
-        orderHistory.map(({ id, name, total_price, line_items }) => (
-          <div className="column is-12" key={id}>
-            <div className="box orders-history-block has-shadow-hover">
-              <div className="is-flex orders-block-header">
-                <OrderNumber orderNumber={name} />
-                <OrderType orderType="One-time" />
-                <Price price={total_price} />
-                <Dispatch dispatchDate="August 7th 2019" />
-              </div>
+        orderHistory.map(({ id, name, total_price, line_items }) => {
+          // console.log(line_items);
+          return (
+            <div className="column is-12" key={id}>
+              <div className="box orders-history-block has-shadow-hover">
+                <div className="is-flex orders-block-header">
+                  <OrderNumber orderNumber={name} />
+                  <OrderType orderType="One-time" />
+                  <Price price={total_price} />
+                  <Dispatch dispatchDate="August 7th 2019" />
+                </div>
 
-              <hr />
+                <hr />
 
-              <div className="order-information">
-                <p className="title is-6 is-marginless">
-                  It&apos;s been dispatched!
-                </p>
+                <div className="order-information">
+                  <p className="title is-6 is-marginless">
+                    It&apos;s been dispatched!
+                  </p>
 
-                <div>
-                  <div className="order-information-expanded">
-                    {line_items.map(
-                      ({ id: productID, image, name: productTitle, price }) => (
-                        <>
-                          <div className="product-list-boxes columns is-multiline">
+                  <div>
+                    <div className="order-information-expanded">
+                      <div className="product-list-boxes columns is-multiline">
+                        {line_items.map(
+                          ({
+                            id: productID,
+                            image,
+                            name: productTitle,
+                            price,
+                            variant_id,
+                            description
+                          }) => (
                             <ProductCard
-                              key={productID}
-                              imagealt="Product bars"
+                              key={`${productID}-${variant_id}`}
+                              imagealt={productTitle}
                               image={image}
                               productTitle={productTitle}
-                              productVariant={[
-                                '1x Berry',
-                                '1x Vanilla',
-                                '1x Chocolate'
-                              ]}
+                              productVariant={description}
                               price={price}
                             />
-                          </div>
-                          <hr />
-                          <DeliveryDetails deliveryAddress="925 N La Brea Ave, West Hollywood, 90038" />
-                        </>
-                      )
-                    )}
+                          )
+                        )}
+                      </div>
+                      <hr />
+                      <DeliveryDetails deliveryAddress="925 N La Brea Ave, West Hollywood, 90038" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
       <div className="column is-12">
         <div className="box orders-history-block has-shadow-hover">
